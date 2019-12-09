@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+ <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+ <mapper namespace="www.spring.com.recipe.mapper.RecipeMapper">
+ 	<resultMap id="rm4RecipeIngredients"
+		type="www.spring.com.recipe.model.RecipeIngredients">
+		<id property="recipeIngredientsId" column="recipeIngredientsId" />
+		<result property="name" column="name" />
+		<discriminator javaType="String" column="descrimi">
+			<case value='0' resultMap="ingredients" />
+			<case value='1' resultMap="recipe" />
+		</discriminator>
+	</resultMap>
+	
+	<resultMap id="recipe"
+		type="www.spring.com.recipe.model.Recipe" extends="rm4RecipeIngredients">
+		<id property="recipeId" column="recipeId" />
+		<result property="views" column="views" />
+		<result property="goodAamount" column="goodAamount" />
+		<result property="badAamount" column="badAamount" />
+	</resultMap>
+	
+	<resultMap id="ingredients"
+		type="www.spring.com.recipe.model.Ingredients" extends="rm4RecipeIngredients">
+	</resultMap>
+	
+	<resultMap id="rm4CookingProcess"
+		type="www.spring.com.recipe.model.CookingProcess">
+		<id property="cpId" column="cpId" />
+		<result property="recipeId" column="recipeId" />
+		<result property="processNumber" column="processNumber" />
+		<result property="process" column="process" />
+	</resultMap>
+	
+	<!-- S.11.30 -->
+	<resultMap id="rm4TipRecipe"
+		type="www.spring.com.recipe.model.TipRecipe">
+		<id property="tipRecipeId" column="tipRecipeId" />
+		<result property="addRecipeIngredients" column="addRecipeIngredients" />
+	</resultMap>
+	
+	<resultMap id="rm4TipRecipeCP"
+		type="www.spring.com.recipe.model.TipRecipeCookingPreocess">
+		<id property="tipRecipeCPId" column="tipRecipeCPId" />
+		<result property="tiprecipeId" column="tiprecipeId" />
+		<result property="processNumber" column="processNumber" />
+		<result property="process" column="process" />
+	</resultMap>
+	
+	<!-- E.11.30 -->
+	
+	<select id="selectAllRecipe" resultMap="rm4RecipeIngredients">
+ 		<![CDATA[
+ 		select ri.recipeIngredientsId, ri.name, ri.descrimi, 
+ 			   r.recipeId, r.views, r.goodAamount, r.badAamount
+ 		 from recipe r, RecipeIngredients ri
+ 		where ri.descrimi = '1' and ri.recipeIngredientsId = r.recipeIngredientsId
+ 		]]>
+	</select>
+	
+	<select id="selectAllCP" resultMap="rm4CookingProcess">
+ 		<![CDATA[
+ 		select * from cookingprocess
+ 		]]>
+	</select>
+	
+	<select id="selectCP" resultMap="rm4CookingProcess">
+ 		<![CDATA[
+ 		select * from cookingprocess where recipeId = #{recipeId}
+ 		]]>
+	</select>
+	
+	<!-- S.11.30 -->
+	<select id="selectAllTipRecipe" resultMap="rm4TipRecipe">
+ 		<![CDATA[
+ 		select * from tipRecipe 
+ 		]]>
+	</select>
+	
+	<select id="selectAllTipRecipeCP" resultMap="rm4TipRecipeCP">
+ 		<![CDATA[
+ 		select * from tipRecipeCP 
+ 		]]>
+	</select>
+	<!-- E.11.30 -->
+	
+ </mapper>

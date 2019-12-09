@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC 
+"-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="www.spring.com.recipe.mapper.ReplyMapper">
+	<resultMap id="rm4ReplyVO"
+		type="www.spring.com.recipe.model.ReplyVO">
+		<id property="recipeId" column="recipeId" />
+		<result property="replyId" column="replyId" />
+		<result property="replyerId" column="replyerId" />
+		<result property="content" column="content" />
+		<result property="regdate" column="regdate" />
+		<result property="updatedate" column="updatedate" />
+	</resultMap>
+	
+	<select id="getReply" resultMap="rm4ReplyVO">
+		<![CDATA[
+			select * from reply
+		]]>
+	</select>	
+	
+	<insert id="insertReply">
+		<!-- 생성된 identifier가 주어진 객체에 자동적으로 채워진다. -->
+		<selectKey keyProperty="replyId" resultType="int" order="BEFORE">
+			select seq_reply.nextval FROM DUAL
+		</selectKey>
+  		insert into reply(replyId, recipeId, content, replyerId)
+		  values(#{replyId}, #{recipeId}, #{content,jdbcType=VARCHAR}, #{replyerId,jdbcType=VARCHAR})
+	</insert>
+</mapper>
+
+
+
+
+
+
+
+
